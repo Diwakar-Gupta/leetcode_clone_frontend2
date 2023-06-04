@@ -1,0 +1,54 @@
+.container{
+    height: 100%;
+    width: 100%;
+
+    position: relative;
+}
+
+.pdContainer{
+    overflow: scroll;
+}
+
+.headerContainer{
+    position: absolute;
+    top: 0px;
+    height: 3rem;
+    width: 100%;
+    padding-left: .5rem;
+    padding-right: .5rem;
+}
+
+.bodyContainer{
+    position: absolute;
+    top: 3rem;
+    bottom: 0px;
+    width: 100%;
+    padding: .5rem;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.bodyContainer>*:not(.divider){
+    /* Align self */
+
+    flex: 1;
+    height: 100%;
+    width: 100%;
+
+    /* Align child */
+    display: flex;
+    flex-direction: column;
+}
+/* .divider{
+    background-color: white;
+} */
+.dividerH{
+    height: .5rem;
+}
+.dividerV{
+    width: .5rem;
+}
+.borderRadius5px{
+    border-radius: 5px;
+}
