@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { testSolution, submitSolution } from '../../backendApi/submittions';
 import { getProblemBySlug } from '../../backendApi/problem';
 import { useEffect, useState } from 'react';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 function ProblemEditorPage(){
     const { problemSlug } = useParams();
@@ -55,9 +56,15 @@ function ProblemEditorPage(){
     } else {
         return (
             <div>
-                <div>
+                <div style={{'textAlign': 'start'}}>
                     <h3>{problem.title}</h3>
-                    {problem.description}
+                    <MarkdownPreview
+                        source={problem.description}
+                        wrapperElement={{
+                            "data-color-mode": "light"
+                        }}
+                            
+                    />
                 </div>
                     <div>
                         <select defaultValue={editorLanguage.id} onChange={editorLanguageChangehandler}>
