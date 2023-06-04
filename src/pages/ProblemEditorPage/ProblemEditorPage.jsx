@@ -62,7 +62,7 @@ function ProblemEditorPage(){
                     <div>
                         <select defaultValue={editorLanguage.id} onChange={editorLanguageChangehandler}>
                             {
-                                problem.languages.map(lang => {
+                                problem.languageAvailable.map(lang => {
                                     return (
                                         <option key={lang.id} value={lang.id}>{lang.name}</option>
                                     );

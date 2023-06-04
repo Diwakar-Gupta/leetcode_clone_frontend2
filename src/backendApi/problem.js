@@ -48,13 +48,6 @@ export function getProblemBySlug(slug, callBackSuccess, callBackFailure){
         }
     })
     .then(res => {
-        res.defaultLanguage = {id: 'open-java-8', name: 'Open jdk 8'};
-        res.languages = [
-            {id: 'py37', name: 'Python 3.7'},
-            {id: 'py38', name: 'Python 3.8'},
-            {id: 'open-java-8', name: 'Open jdk 8'},
-            {id: 'oracle-java-8', name: 'Oracle Java 8'},
-        ];
         callBackSuccess(res);
     })
     .catch(err => {
