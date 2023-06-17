@@ -9,12 +9,12 @@ function ProblemEditorPage(){
     const [problem, setProblem] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [editorLanguage, setEditorLanguage] = useState('java');
+    const [editorLanguageSlug, setEditorLanguageSlug] = useState('java');
     let code = '';
     
     function handleRunCodeButtonPress() {
         const submittionDTO = {
-            language: editorLanguage.id,
+            languageSlug: editorLanguageSlug,
             code: code,
         };
         testSolution(problemSlug, submittionDTO, console.log, console.error);
@@ -22,8 +22,8 @@ function ProblemEditorPage(){
 
     function handleSubmitCodeButtonPress() {
         const submittionDTO = {
-            language: editorLanguage.id,
-            code: 'code',
+            languageSlug: editorLanguageSlug,
+            code: code,
         };
         submitSolution(problemSlug, submittionDTO, console.log, console.error);
     }
@@ -32,14 +32,15 @@ function ProblemEditorPage(){
         code = e.target.value;
     }
     function editorLanguageChangehandler(e) {
-        setEditorLanguage(e.target.value);
+        setEditorLanguageSlug(e.target.value);
     }
 
     useEffect(() => {
         setLoading(true);
         function success(problem){
+            console.log(problem);
             setLoading(false);
-            setEditorLanguage(problem.defaultLanguage);
+            setEditorLanguageSlug(problem.defaultLanguage.slug);
             setProblem(problem);
         }
         function failed(err){
@@ -67,11 +68,11 @@ function ProblemEditorPage(){
                     />
                 </div>
                     <div>
-                        <select defaultValue={editorLanguage.id} onChange={editorLanguageChangehandler}>
+                        <select defaultValue={editorLanguageSlug} onChange={editorLanguageChangehandler}>
                             {
                                 problem.languageAvailable.map(lang => {
                                     return (
-                                        <option key={lang.id} value={lang.id}>{lang.name}</option>
+                                        <option key={lang.slug} value={lang.slug}>{lang.name}</option>
                                     );
                                 })
                             }

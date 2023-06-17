@@ -17,7 +17,7 @@ function createProblemSubmittion(problemSlug, payload, actionType, callBackSucce
     actionType = actionType.toUpperCase();
     let url;
     if(actionType === 'TEST'){
-        url = `/api/problems/${problemSlug}/submittions?actionType=test`;
+        url = `/api/problems/${problemSlug}/submittions_run`;
     } else {
         url = `/api/problems/${problemSlug}/submittions`;
     }
@@ -43,14 +43,29 @@ function createProblemSubmittion(problemSlug, payload, actionType, callBackSucce
     });
 }
 
-export function testSolution(problemSlug, {code, language}, callBackSuccess, callBackFailure){
-    createProblemSubmittion(
-        problemSlug,
-        {code, language},
-        'TEST',
-        callBackSuccess,
-        callBackFailure,
-    );
+export function testSolution(problemSlug, payload, callBackSuccess, callBackFailure){
+console.log('Sending payload');
+console.log(payload);
+    fetch(`/api/problems/${problemSlug}/submittions_run`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    })
+    .then(res => {
+        if(res.ok){
+            return res.json();
+        } else {
+            throw res;
+        }
+    })
+    .then(res => {
+        callBackSuccess(res);
+    })
+    .catch(err => {
+        callBackFailure(err);
+    });
 }
 
 export function submitSolution(problemSlug, {code, language}, callBackSuccess, callBackFailure){
