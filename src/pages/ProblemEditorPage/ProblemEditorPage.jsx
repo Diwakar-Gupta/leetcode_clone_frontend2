@@ -10,7 +10,7 @@ function ProblemEditorPage(){
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [editorLanguageSlug, setEditorLanguageSlug] = useState('java');
-    let code = '';
+    let [code, setCode] = useState('');
     
     function handleRunCodeButtonPress() {
         const submittionDTO = {
@@ -29,7 +29,8 @@ function ProblemEditorPage(){
     }
     function textAreaChangeHandler(e){
         e.preventDefault();
-        code = e.target.value;
+        const newCode = e.target.value;
+        setCode(newCode);
     }
     function editorLanguageChangehandler(e) {
         setEditorLanguageSlug(e.target.value);
@@ -79,7 +80,7 @@ function ProblemEditorPage(){
                         </select>
                     </div>
                 <div>
-                    <textarea rows={10} cols={50} onChange={textAreaChangeHandler}>
+                    <textarea rows={10} cols={50} value={code} onChange={textAreaChangeHandler}>
                     </textarea>
                 </div>
                     <button onClick={handleRunCodeButtonPress}>Test</button>
