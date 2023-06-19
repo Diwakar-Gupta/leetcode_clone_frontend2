@@ -1,3 +1,6 @@
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+
 /*
     input
     problem: {
@@ -76,4 +79,23 @@ export function submitSolution(problemSlug, {code, language}, callBackSuccess, c
         callBackSuccess,
         callBackFailure,
     );
+}
+
+export function codeRunUpdateListener({uuid}, onUpdate, onConnectionClose){
+    const socket = new SockJS('/websocket');
+    const client = Stomp.over(socket);
+    client.debug=() => {};
+
+    client.connect({}, function (frame) {
+        console.log("StompJs connected to broker over ws");
+        client.subscribe(`/submittion_run/${uuid}`, function (message) {
+            message = JSON.parse(message.body);
+            onUpdate(message);
+            
+            if(message.updateType === 'Done'){
+                socket.close();
+            }
+        });
+    });
+    socket.onclose = onConnectionClose;
 }

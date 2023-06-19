@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { testSolution, submitSolution } from '../../backendApi/submittions';
+import { testSolution, submitSolution, codeRunUpdateListener } from '../../backendApi/submittions';
 import { getProblemBySlug } from '../../backendApi/problem';
 import { useEffect, useState } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
@@ -17,7 +17,18 @@ function ProblemEditorPage(){
             languageSlug: editorLanguageSlug,
             code: code,
         };
-        testSolution(problemSlug, submittionDTO, console.log, console.error);
+        function onCodeStatupdate(meta){
+            console.log(meta);
+        }
+        function onConnectionClose(){
+            // did not work now
+            console.log('connection closed');
+        }
+        function codeSubmittedhandler(meta){
+            console.log(meta);
+            codeRunUpdateListener(meta, onCodeStatupdate, onConnectionClose);
+        }
+        testSolution(problemSlug, submittionDTO, codeSubmittedhandler, console.error);
     }
 
     function handleSubmitCodeButtonPress() {
