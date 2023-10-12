@@ -93,7 +93,8 @@ export function codeRunUpdateListener({uuid}, onUpdate, onConnectionClose){
             onUpdate(message);
             
             if(message.updateType === 'Done'){
-                socket.close();
+                client.disconnect();
+                onConnectionClose();
             }
         });
     });
