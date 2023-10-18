@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  width: 80%;
+  margin: auto;
 }
 
 .App-logo {
@@ -36,3 +38,14 @@
     transform: rotate(360deg);
   }
 }
+.text-editor>textarea{
+  width: 100%;
+  height: 25rem;
+}
+.actionContainer{
+  display: flex;
+  justify-content: space-between;
+}
+
+/* height: 6rem;
+width: 30rem; */

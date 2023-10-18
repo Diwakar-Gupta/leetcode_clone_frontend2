@@ -7,6 +7,7 @@ import {
 import { getProblemBySlug } from "../../backendApi/problem";
 import { useEffect, useState } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
+import RunCodeResult from "../../components/RunCodeResult";
 
 function ProblemEditorPage() {
   const { problemSlug } = useParams();
@@ -14,14 +15,18 @@ function ProblemEditorPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editorLanguageSlug, setEditorLanguageSlug] = useState("java");
+  const [testCases, setTestCases] = useState([{ input: "" }]);
+  const [submittionUpdate, setSubmittionUpdate] = useState(null);
   let [code, setCode] = useState("");
 
   function handleRunCodeButtonPress() {
     const submittionDTO = {
       languageSlug: editorLanguageSlug,
       code: code,
+      testCases: testCases,
     };
     function onCodeStatupdate(meta) {
+      setSubmittionUpdate(meta);
       console.log(meta);
     }
     function onConnectionClose() {
@@ -31,6 +36,15 @@ function ProblemEditorPage() {
     function codeSubmittedhandler(meta) {
       console.log(meta);
       codeRunUpdateListener(meta, onCodeStatupdate, onConnectionClose);
+      setSubmittionUpdate({
+        judgement: "Pending",
+        testCases: [
+          {
+            status: "Pending",
+            output: "Pending",
+          },
+        ],
+      });
     }
     testSolution(
       problemSlug,
@@ -101,7 +115,7 @@ function ProblemEditorPage() {
             })}
           </select>
         </div>
-        <div>
+        <div className="text-editor">
           <textarea
             rows={10}
             cols={50}
@@ -109,9 +123,35 @@ function ProblemEditorPage() {
             onChange={textAreaChangeHandler}
           ></textarea>
         </div>
-        <button onClick={handleRunCodeButtonPress}>Test</button>
-        <button onClick={handleSubmitCodeButtonPress}>Submit</button>
-        <div></div>
+        <div className="actionContainer">
+          <div>
+            {testCases.map((dict, idx) => {
+              return (
+                <textarea
+                  key={idx}
+                  value={dict.input}
+                  onChange={(e) => {
+                    const testCasesNew = [...testCases];
+                    testCasesNew[idx]["input"] = e.target.value;
+                    setTestCases(testCasesNew);
+                  }}
+                />
+              );
+            })}
+          </div>
+          <div>
+            <button onClick={handleRunCodeButtonPress}>Test</button>
+            <button onClick={handleSubmitCodeButtonPress}>Submit</button>
+          </div>
+        </div>
+        {submittionUpdate ? (
+          <RunCodeResult
+            testCases={testCases}
+            submittionUpdate={submittionUpdate}
+          />
+        ) : (
+          <div></div>
+        )}
       </div>
     );
   }
